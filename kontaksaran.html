@@ -1,0 +1,81 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="formulir kontak dan saran mahasiswa">
+    <title>kontak saran</title>
+</head>
+<body>
+    <header>
+        <h1> kontak & saran</h1>
+        <P> silahkan isi formulir berikut</P>
+    </header>
+    <nav aria-label="navigasi utama">
+        <a href="profilpribadi.html">beranda</a>
+        <a href="kontaksaran.html">kontak dan saran</a>
+    </nav>
+    <main>
+        <selection>
+            <h2> formulir kontak </h2>
+            <form action="#" method="get">
+                <P>
+                    <label for="email">Alamat Email:</label>
+                    <input type="text" id="nama" name="nama"
+                    required minlength="3" maxlength="50">
+                </P>
+                <P>
+                    <label for="email">alamat email:</label>
+                    <input type="email" id="email" name="email"
+                    required>
+                </P>
+                <p>
+                    <label for="telepon">nomor telpon:</label>
+                    <input type="tel"i id="telepon" name="telepone"
+                    pattern="[0-9+ - ]{8,15}"
+                    title="masukkan 8 sampai 15 karakter berupa angka, sapasi tanda tambah, atau tanda hubung."
+                    required max="2026-12-31">
+                </p>
+
+                <P>
+                    <label for="usia">Usia</label>
+                    <input type="number" id="usia" name="usia"
+                    min="15" max="100"
+                    required>
+                </P>
+
+                <P>
+                    <Label for="website">website pribadi</Label>
+                    <input type="url" id="website" name="website"
+                    placeholder="https://porto.com"></input>
+                </P>
+
+                <P>
+                    <label for="kategori">jenis pesan:</label>
+                    <select id="kategori" name="kategori" required>
+                        <option value="">pilih kategori</option>
+                        <option value="pertanyaan">pertanyaan</option>
+                        <option value="saran">saran</option>
+                        <option value="kritik">kritik</option>
+
+                    </select>
+                </P>
+
+                <P>
+                    <label for="pesan">pesan</label>
+                    <textarea id="pesan" name="pesan"
+                    rows="5" minlength="10" maxlenght="500"
+                    required></textarea>
+                </P>
+                <a href="profilpribadi.html">
+                    <button type="button">kembali ke beranda</button>
+                </a>
+                <button type="submit">kirim pesan</button>
+                <button type="reset"></button>
+            </form>
+        </selection>
+    </main>
+    <footer>
+        <P>&copy; 2026 akhmad aril prastiawan</P>
+    </footer>
+</body>
+</html>
