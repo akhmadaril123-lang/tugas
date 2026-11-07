@@ -1,0 +1,282 @@
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>search github</title>
+    <style>
+        * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: #0d1117;
+      color: #c9d1d9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
+      background-color: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      text-align: center;
+      margin-bottom: 20px;
+      color: #f0f6fc;
+    }
+
+    /* Form Styles */
+    .search-form {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .search-input {
+      flex: 1;
+      padding: 10px 14px;
+      background-color: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      color: #f0f6fc;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .search-input:focus {
+      border-color: #58a6ff;
+    }
+
+    .search-btn {
+      padding: 10px 16px;
+      background-color: #238636;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .search-btn:hover {
+      background-color: #2ea043;
+    }
+
+    /* State Handling Styles */
+    .hidden {
+      display: none !important;
+    }
+
+    .status-msg {
+      text-align: center;
+      padding: 20px 0;
+      color: #8b949e;
+    }
+
+    .error-msg {
+      color: #f85149;
+    }
+
+    /* Loading Spinner */
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid #30363d;
+      border-top: 3px solid #58a6ff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 10px auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Profile Card Styles */
+    .profile-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding-top: 10px;
+    }
+
+    .avatar {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      border: 2px solid #30363d;
+      margin-bottom: 12px;
+    }
+
+    .user-name {
+      font-size: 1.25rem;
+      color: #f0f6fc;
+      font-weight: 600;
+    }
+
+    .user-login {
+      font-size: 0.9rem;
+      color: #8b949e;
+      margin-bottom: 10px;
+    }
+
+    .user-bio {
+      font-size: 0.9rem;
+      color: #c9d1d9;
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+
+    .badge {
+      display: inline-block;
+      background-color: #21262d;
+      border: 1px solid #30363d;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      color: #8b949e;
+      margin-bottom: 20px;
+    }
+
+    .badge strong {
+      color: #f0f6fc;
+    }
+
+    .profile-link {
+      display: inline-block;
+      width: 100%;
+      padding: 10px;
+      background-color: #21262d;
+      border: 1px solid #30363d;
+      color: #58a6ff;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 600;
+      text-align: center;
+      transition: background-color 0.2s;
+    }
+
+    .profile-link:hover {
+      background-color: #30363d;
+    }
+    </style>
+</head>
+<body>
+     <div class="container">
+    <h1>Pencari Profil GitHub</h1>
+
+    <!-- Form Input -->
+    <form id="searchForm" class="search-form">
+      <input 
+        type="text" 
+        id="usernameInput" 
+        class="search-input" 
+        placeholder="Masukkan username GitHub..." 
+        required 
+      />
+      <button type="submit" class="search-btn">Cari</button>
+    </form>
+
+    <!-- Indicator Loading -->
+    <div id="loading" class="status-msg hidden">
+      <div class="spinner"></div>
+      <p>Mencari pengguna...</p>
+    </div>
+
+    <!-- Pesan Error / Not Found -->
+    <div id="errorMsg" class="status-msg error-msg hidden">
+      User tidak ditemukan.
+    </div>
+    <!-- hasil profil -->
+     <div id="profileCard" class="profile-card hidden">
+      <img id="avatar" src="" alt="Avatar" class="avatar">
+      <h2 id="name" class="user-name"></h2>
+      <p id="login" class="user-login"></p>
+      <p id="bio" class="user-bio"></p>
+      
+      <div class="badge">
+        Repositori Publik: <strong id="publicRepos">0</strong>
+      </div>
+
+      <a id="profileLink" href="" target="_blank" class="profile-link">Buka Profil GitHub</a>
+    </div>
+  </div>
+
+     <script>
+        const form = document.getElementById('searchForm');
+        const usernameInput = document.getElementById('usernameInput');
+        const loading = document.getElementById('loading');
+        const errorMsg = document.getElementById('errorMsg');
+        const profileCard = document.getElementById('profileCard');
+
+        // element data profil
+        const avatar = document.getElementById('avatar');
+        const name = document.getElementById('name');
+        const login = document.getElementById('login');
+        const bio = document.getElementById('bio');
+        const publicRepos = document.getElementById('publicRepos');
+        const profileLink = document.getElementById('profileLink');
+
+       form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = usernameInput.value.trim();
+
+      if (!username) return;
+
+      // Reset state tampilan
+      loading.classList.remove('hidden');
+      errorMsg.classList.add('hidden');
+      profileCard.classList.add('hidden');
+
+      try {
+        const response = await fetch(`https://api.github.com/users/${username}`);
+
+        if (response.status === 404) {
+          errorMsg.textContent = 'User tidak ditemukan.';
+          errorMsg.classList.remove('hidden');
+          return;
+        }
+
+        if (!response.ok) {
+          errorMsg.textContent = 'Gagal mengambil data. Coba lagi nanti.';
+          errorMsg.classList.remove('hidden');
+          return;
+        }
+
+        const data = await response.json();
+
+        // Isi data ke element HTML
+        avatar.src = data.avatar_url;
+        name.textContent = data.name || data.login;
+        login.textContent = `@${data.login}`;
+        bio.textContent = data.bio || 'Tidak ada bio.';
+        publicRepos.textContent = data.public_repos;
+        profileLink.href = data.html_url;
+
+        // Tampilkan card profil
+        profileCard.classList.remove('hidden');
+      } catch (err) {
+        errorMsg.textContent = 'Terjadi kesalahan jaringan.';
+        errorMsg.classList.remove('hidden');
+      } finally {
+        loading.classList.add('hidden');
+      }
+    });
+  </script>
+</body>
+</html>
