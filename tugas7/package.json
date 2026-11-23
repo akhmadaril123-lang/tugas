@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "pinia": "^4.1.0",
-    "vue-router": "^5.5.1"
-  }
-}
