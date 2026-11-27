@@ -1,0 +1,25 @@
+@baseUrl = http://127.0.0.1:8787
+
+### 1. Ambil semua data inventaris
+GET {{baseUrl}}/api/inventaris
+
+### 2. Ambil data inventaris berdasarkan kategori
+GET {{baseUrl}}/api/inventaris?kategori=switch
+
+### 3. Ambil detail satu barang (ID valid)
+GET {{baseUrl}}/api/inventaris/1
+
+### 4. Ambil detail satu barang (ID tidak ada -> 404)
+GET {{baseUrl}}/api/inventaris/999
+
+### 5. Tambah barang baru (Router)
+POST http://127.0.0.1:8787/api/inventaris
+Content-Type: application/json
+
+{
+  "nama": "TP-Link Omada ER605 Gigabit Router",
+  "kategori": "router",
+  "jumlah": 3,
+  "kondisi": "baik",
+  "lokasi": "Lab Jaringan 2"
+}
